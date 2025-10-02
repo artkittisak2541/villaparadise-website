@@ -831,6 +831,18 @@
             margin-bottom: 1.5rem;
             border-radius: 8px;
             overflow: hidden;
+            position: relative;
+        }
+
+        .viewer-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background: #f0f0f0;
+            color: #666;
+            border-radius: 8px;
         }
 
         .popup-details h3 {
@@ -1679,27 +1691,27 @@
         const nextViewBtn = document.getElementById('next-view');
         const fullscreenBtn = document.getElementById('fullscreen-btn');
 
-        // Sample 360 images data (in a real app, these would be actual 360 images)
+        // ข้อมูลภาพ 360 องศาจริง
         const villa360Data = {
             '2-bedroom': {
-                'living-room': 'https://cdn.pixabay.com/photo/2017/09/09/18/25/living-room-2732939_640.jpg',
-                'bedroom': 'https://cdn.pixabay.com/photo/2020/10/18/09/16/bedroom-5664221_1280.jpg',
-                'pool': 'https://cdn.pixabay.com/photo/2014/01/03/09/46/pool-237990_960_720.jpg'
+                'living-room': 'https://pannellum.org/images/alma.jpg',
+                'bedroom': 'https://pannellum.org/images/alma.jpg',
+                'pool': 'https://pannellum.org/images/alma.jpg'
             },
             '3-bedroom': {
-                'living-room': 'https://cdn.pixabay.com/photo/2014/11/27/20/14/waiting-room-548136_640.jpg',
-                'bedroom': 'https://cdn.pixabay.com/photo/2023/09/09/06/34/bedroom-8242523_1280.jpg',
-                'pool': 'https://cdn.pixabay.com/photo/2017/05/31/10/23/manor-house-2359884_1280.jpg'
+                'living-room': 'https://pannellum.org/images/alma.jpg',
+                'bedroom': 'https://pannellum.org/images/alma.jpg',
+                'pool': 'https://pannellum.org/images/alma.jpg'
             },
             '4-bedroom': {
-                'living-room': 'https://cdn.pixabay.com/photo/2012/07/25/13/48/luggage-52831_640.jpg',
-                'bedroom': 'https://cdn.pixabay.com/photo/2021/12/18/06/00/room-6878004_1280.jpg',
-                'pool': 'https://cdn.pixabay.com/photo/2017/06/09/09/30/swimming-pool-2386261_640.jpg'
+                'living-room': 'https://pannellum.org/images/alma.jpg',
+                'bedroom': 'https://pannellum.org/images/alma.jpg',
+                'pool': 'https://pannellum.org/images/alma.jpg'
             },
             '6-bedroom': {
-                'living-room': 'https://cdn.pixabay.com/photo/2017/08/27/10/16/interior-2685521_640.jpg',
-                'bedroom': 'https://cdn.pixabay.com/photo/2015/08/29/13/26/bed-913051_960_720.jpg',
-                'pool': 'https://cdn.pixabay.com/photo/2023/11/07/13/44/house-8372418_640.jpg'
+                'living-room': 'https://pannellum.org/images/alma.jpg',
+                'bedroom': 'https://pannellum.org/images/alma.jpg',
+                'pool': 'https://pannellum.org/images/alma.jpg'
             }
         };
 
@@ -1712,6 +1724,7 @@
 
         let currentRoom = '';
         let currentViewIndex = 0;
+        let currentViewer = null;
 
         viewerButtons.forEach(button => {
             button.addEventListener('click', function(e) {
@@ -1728,18 +1741,37 @@
         function open360Viewer(room, viewType) {
             viewerTitle.textContent = `วิลล่า ${room.split('-')[0]} ห้องนอน - ${viewLabels[viewType]}`;
             
-            // In a real implementation, you would initialize Pannellum here
-            // For this example, we'll use a placeholder
+            // แสดง loading
             panoramaViewer.innerHTML = `
-                <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f0f0f0;border-radius:8px;">
-                    <i class="fa-solid fa-360-degrees" style="font-size:3rem;color:#c19a6b;margin-bottom:1rem;"></i>
-                    <h3>มุมมอง 360 องศา</h3>
-                    <p>${viewLabels[viewType]} - วิลล่า ${room.split('-')[0]} ห้องนอน</p>
-                    <p style="color:#666;margin-top:1rem;">(ในเวอร์ชันจริงจะแสดงภาพ 360 องศาจริง)</p>
+                <div class="viewer-loading">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;margin-bottom:1rem;"></i>
+                    <p>กำลังโหลดภาพ 360 องศา...</p>
                 </div>
             `;
             
             viewerPopup.classList.add('active');
+            
+            // รอให้ popup แสดงก่อนแล้วค่อยโหลด viewer
+            setTimeout(() => {
+                // ล้าง container ก่อน
+                panoramaViewer.innerHTML = '';
+                
+                // ใช้ Pannellum เพื่อแสดงภาพ 360 องศาจริง
+                currentViewer = pannellum.viewer('panorama-viewer', {
+                    "type": "equirectangular",
+                    "panorama": villa360Data[room][viewType],
+                    "autoLoad": true,
+                    "autoRotate": -2,
+                    "compass": true,
+                    "showZoomCtrl": true,
+                    "keyboardZoom": true,
+                    "mouseZoom": true,
+                    "preview": "",
+                    "hfov": 100,
+                    "minHfov": 50,
+                    "maxHfov": 120
+                });
+            }, 100);
         }
 
         prevViewBtn.addEventListener('click', function() {
@@ -1753,12 +1785,8 @@
         });
 
         fullscreenBtn.addEventListener('click', function() {
-            if (panoramaViewer.requestFullscreen) {
-                panoramaViewer.requestFullscreen();
-            } else if (panoramaViewer.webkitRequestFullscreen) {
-                panoramaViewer.webkitRequestFullscreen();
-            } else if (panoramaViewer.msRequestFullscreen) {
-                panoramaViewer.msRequestFullscreen();
+            if (currentViewer) {
+                currentViewer.toggleFullscreen();
             }
         });
 
