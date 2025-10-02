@@ -579,6 +579,9 @@
             flex-wrap: wrap;
             gap: 1rem;
             margin-bottom: 3rem;
+            padding: 1rem;
+            background-color: rgba(193, 154, 107, 0.1);
+            border-radius: 10px;
         }
 
         .villa-btn {
@@ -596,6 +599,38 @@
         .villa-btn:hover {
             background-color: var(--primary);
             color: var(--white);
+        }
+
+        /* 360 Buttons */
+        .viewer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .viewer-btn {
+            background-color: var(--secondary);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .viewer-btn:hover {
+            background-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .viewer-btn i {
+            font-size: 0.9rem;
         }
 
         /* Reviews Section */
@@ -908,14 +943,14 @@
         }
 
         /* 360 Viewer Controls */
-        .viewer-controls {
+        .viewer-controls-popup {
             display: flex;
             justify-content: center;
             gap: 1rem;
             margin-top: 1rem;
         }
 
-        .viewer-btn {
+        .viewer-btn-popup {
             background-color: var(--primary);
             color: var(--white);
             border: none;
@@ -925,7 +960,7 @@
             transition: var(--transition);
         }
 
-        .viewer-btn:hover {
+        .viewer-btn-popup:hover {
             background-color: var(--primary-dark);
         }
 
@@ -977,6 +1012,16 @@
             .villa-buttons {
                 flex-direction: column;
                 align-items: center;
+            }
+
+            .viewer-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .viewer-btn {
+                width: 100%;
+                justify-content: center;
             }
         }
 
@@ -1137,7 +1182,7 @@
                     <p>เลือกวิลล่าที่ใช่สำหรับวันหยุดของคุณ</p>
                 </div>
                 
-                <!-- Villa Filter Buttons -->
+                <!-- Villa Filter Buttons - ปุ่มแยกวิลล่า -->
                 <div class="villa-buttons reveal">
                     <button class="villa-btn active" data-filter="all">ทั้งหมด</button>
                     <button class="villa-btn" data-filter="2-bedroom">2 ห้องนอน</button>
@@ -1160,10 +1205,17 @@
                             <h3>วิลล่า 2 ห้องนอน</h3>
                             <p>รองรับ 4-8 คน</p>
                             <div class="price">฿7,500 / คืน</div>
+                            <!-- ปุ่ม 360 องศา -->
                             <div class="viewer-controls">
-                                <button class="viewer-btn" data-room="2-bedroom" data-type="living-room">ห้องนั่งเล่น</button>
-                                <button class="viewer-btn" data-room="2-bedroom" data-type="bedroom">ห้องนอน</button>
-                                <button class="viewer-btn" data-room="2-bedroom" data-type="pool">สระว่ายน้ำ</button>
+                                <button class="viewer-btn" data-room="2-bedroom" data-type="living-room">
+                                    <i class="fa-solid fa-360-degrees"></i> ห้องนั่งเล่น
+                                </button>
+                                <button class="viewer-btn" data-room="2-bedroom" data-type="bedroom">
+                                    <i class="fa-solid fa-360-degrees"></i> ห้องนอน
+                                </button>
+                                <button class="viewer-btn" data-room="2-bedroom" data-type="pool">
+                                    <i class="fa-solid fa-360-degrees"></i> สระว่ายน้ำ
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1181,10 +1233,17 @@
                             <h3>วิลล่า 3 ห้องนอน</h3>
                             <p>รองรับ 6-12 คน</p>
                             <div class="price">฿9,800 / คืน</div>
+                            <!-- ปุ่ม 360 องศา -->
                             <div class="viewer-controls">
-                                <button class="viewer-btn" data-room="3-bedroom" data-type="living-room">ห้องนั่งเล่น</button>
-                                <button class="viewer-btn" data-room="3-bedroom" data-type="bedroom">ห้องนอน</button>
-                                <button class="viewer-btn" data-room="3-bedroom" data-type="pool">สระว่ายน้ำ</button>
+                                <button class="viewer-btn" data-room="3-bedroom" data-type="living-room">
+                                    <i class="fa-solid fa-360-degrees"></i> ห้องนั่งเล่น
+                                </button>
+                                <button class="viewer-btn" data-room="3-bedroom" data-type="bedroom">
+                                    <i class="fa-solid fa-360-degrees"></i> ห้องนอน
+                                </button>
+                                <button class="viewer-btn" data-room="3-bedroom" data-type="pool">
+                                    <i class="fa-solid fa-360-degrees"></i> สระว่ายน้ำ
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1202,10 +1261,17 @@
                             <h3>วิลล่า 4 ห้องนอน</h3>
                             <p>รองรับ 8-16 คน</p>
                             <div class="price">฿12,000 / คืน</div>
+                            <!-- ปุ่ม 360 องศา -->
                             <div class="viewer-controls">
-                                <button class="viewer-btn" data-room="4-bedroom" data-type="living-room">ห้องนั่งเล่น</button>
-                                <button class="viewer-btn" data-room="4-bedroom" data-type="bedroom">ห้องนอน</button>
-                                <button class="viewer-btn" data-room="4-bedroom" data-type="pool">สระว่ายน้ำ</button>
+                                <button class="viewer-btn" data-room="4-bedroom" data-type="living-room">
+                                    <i class="fa-solid fa-360-degrees"></i> ห้องนั่งเล่น
+                                </button>
+                                <button class="viewer-btn" data-room="4-bedroom" data-type="bedroom">
+                                    <i class="fa-solid fa-360-degrees"></i> ห้องนอน
+                                </button>
+                                <button class="viewer-btn" data-room="4-bedroom" data-type="pool">
+                                    <i class="fa-solid fa-360-degrees"></i> สระว่ายน้ำ
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1223,10 +1289,17 @@
                             <h3>วิลล่า 6 ห้องนอน</h3>
                             <p>รองรับ 12-20 คน</p>
                             <div class="price">฿18,000 / คืน</div>
+                            <!-- ปุ่ม 360 องศา -->
                             <div class="viewer-controls">
-                                <button class="viewer-btn" data-room="6-bedroom" data-type="living-room">ห้องนั่งเล่น</button>
-                                <button class="viewer-btn" data-room="6-bedroom" data-type="bedroom">ห้องนอน</button>
-                                <button class="viewer-btn" data-room="6-bedroom" data-type="pool">สระว่ายน้ำ</button>
+                                <button class="viewer-btn" data-room="6-bedroom" data-type="living-room">
+                                    <i class="fa-solid fa-360-degrees"></i> ห้องนั่งเล่น
+                                </button>
+                                <button class="viewer-btn" data-room="6-bedroom" data-type="bedroom">
+                                    <i class="fa-solid fa-360-degrees"></i> ห้องนอน
+                                </button>
+                                <button class="viewer-btn" data-room="6-bedroom" data-type="pool">
+                                    <i class="fa-solid fa-360-degrees"></i> สระว่ายน้ำ
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1311,10 +1384,10 @@
         <div class="popup-box">
             <h3 id="viewer-title">มุมมอง 360 องศา</h3>
             <div id="panorama-viewer"></div>
-            <div class="viewer-controls">
-                <button class="viewer-btn" id="prev-view">ก่อนหน้า</button>
-                <button class="viewer-btn" id="next-view">ถัดไป</button>
-                <button class="viewer-btn" id="fullscreen-btn">เต็มหน้าจอ</button>
+            <div class="viewer-controls-popup">
+                <button class="viewer-btn-popup" id="prev-view">ก่อนหน้า</button>
+                <button class="viewer-btn-popup" id="next-view">ถัดไป</button>
+                <button class="viewer-btn-popup" id="fullscreen-btn">เต็มหน้าจอ</button>
             </div>
             <div class="popup-close-btn"><i class="fa-solid fa-xmark"></i></div>
         </div>
@@ -1485,7 +1558,7 @@
 
         observer.observe(statsSection);
 
-        // Villa Filtering
+        // Villa Filtering - ปุ่มแยกวิลล่า
         const villaButtons = document.querySelectorAll('.villa-btn');
         const roomCards = document.querySelectorAll('.room-card');
 
@@ -1597,7 +1670,7 @@
             });
         });
 
-        // 360 Viewer Functionality
+        // 360 Viewer Functionality - ปุ่ม 360 องศา
         const viewerPopup = document.getElementById('viewer-popup');
         const viewerTitle = document.getElementById('viewer-title');
         const panoramaViewer = document.getElementById('panorama-viewer');
