@@ -12,7 +12,939 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
     
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #c19a6b;
+            --primary-dark: #a5825a;
+            --secondary: #2c3e50;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --text: #333;
+            --text-light: #6c757d;
+            --white: #ffffff;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Thai', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            overflow-x: hidden;
+            background-color: var(--light);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay1 {
+            transition-delay: 0.2s;
+        }
+
+        .delay2 {
+            transition-delay: 0.4s;
+        }
+
+        .delay3 {
+            transition-delay: 0.6s;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 2px solid var(--primary);
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background-color: transparent;
+            color: var(--primary);
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(193, 154, 107, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Header */
+        #main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: var(--transition);
+            padding: 1rem 0;
+        }
+
+        #main-header.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow);
+            padding: 0.5rem 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            position: relative;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background-color: var(--white);
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav-close {
+            align-self: flex-end;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            cursor: pointer;
+        }
+
+        .mobile-link {
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .mobile-link:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .hero-slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .slide:nth-child(1) {
+            background-image: url('https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=2070&auto=format&fit=crop');
+        }
+
+        .slide:nth-child(2) {
+            background-image: url('https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=1932&auto=format&fit=crop');
+        }
+
+        .slide:nth-child(3) {
+            background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop');
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+            z-index: -1;
+        }
+
+        .hero .content {
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .hero .cta-button {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+        }
+
+        .hero .cta-button:hover {
+            background-color: transparent;
+            color: var(--white);
+            border-color: var(--white);
+        }
+
+        /* About Section */
+        .about {
+            background-color: var(--white);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-image {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            z-index: -1;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            transition: var(--transition);
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Amenities Section */
+        .amenities {
+            background-color: #f8f9fa;
+        }
+
+        .amenity-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .amenity-card {
+            background-color: var(--white);
+            padding: 2.5rem 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .amenity-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(193, 154, 107, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .icon-wrapper i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .amenity-card h3 {
+            margin-bottom: 1rem;
+        }
+
+        /* Gallery Section */
+        .gallery {
+            background-color: var(--white);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .room-card {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .room-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            z-index: 2;
+        }
+
+        .card-image-wrapper {
+            position: relative;
+            overflow: hidden;
+            height: 250px;
+        }
+
+        .card-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(193, 154, 107, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .room-card:hover .card-overlay {
+            opacity: 1;
+        }
+
+        .room-card:hover .card-image-wrapper img {
+            transform: scale(1.1);
+        }
+
+        .card-overlay i {
+            font-size: 2rem;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-overlay span {
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        .room-info {
+            padding: 1.5rem;
+        }
+
+        .room-info h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Reviews Section */
+        .reviews {
+            background-color: #f8f9fa;
+        }
+
+        .review-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .review-card {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .review-card::before {
+            content: '\201C';
+            font-size: 4rem;
+            color: rgba(193, 154, 107, 0.2);
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            line-height: 1;
+        }
+
+        .review-card p {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .author {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background-color: var(--white);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .contact-item i {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(193, 154, 107, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0.5rem;
+            color: var(--white);
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-5px);
+        }
+
+        .google-map {
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        /* Scroll to Top Button */
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 999;
+        }
+
+        #scrollToTopBtn.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1002;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-box {
+            position: relative;
+            background-color: var(--white);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 10px;
+            padding: 2rem;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .popup-close-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        #panorama-viewer {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .popup-details h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .popup-details ul {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .popup-details li {
+            margin-bottom: 0.5rem;
+            list-style-type: disc;
+        }
+
+        .booking-form {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .booking-form input,
+        .booking-form select {
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+
+        .booking-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+
+        .booking-result.success {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .booking-result.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        /* Stats Section */
+        .stats {
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 4rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        /* Weather Widget */
+        .weather-widget {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            z-index: 998;
+            display: none;
+        }
+
+        .weather-widget.active {
+            display: block;
+        }
+
+        .weather-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-header i {
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+
+        .weather-temp {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 3rem;
+            }
+
+            h2 {
+                font-size: 2.2rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            section {
+                padding: 3rem 0;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .cta-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .popup-box {
+                padding: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -49,7 +981,7 @@
     <main>
         <section class="hero" id="hero">
             <div class="hero-slideshow">
-                <div class="slide"></div>
+                <div class="slide active"></div>
                 <div class="slide"></div>
                 <div class="slide"></div>
             </div>
@@ -62,158 +994,217 @@
         </section>
 
         <section class="about" id="about">
-            <div class="section-title reveal">
-                <h2>เกี่ยวกับเรา</h2>
-                <p>นิยามใหม่ของคำว่าบ้านพักตากอากาศ</p>
-            </div>
-            <div class="about-content">
-                <div class="about-text reveal delay1">
-                    <h3>วิลล่าในฝันของคุณ</h3>
-                    <p>วิลล่า พาราไดซ์ ตั้งอยู่ในทำเลที่เงียบสงบ มอบประสบการณ์การพักผ่อนที่เป็นส่วนตัวอย่างแท้จริง วิลล่าทุกหลังมาพร้อมสระว่ายน้ำส่วนตัวและสิ่งอำนวยความสะดวกครบครัน ตอบโจทย์การพักผ่อนกับครอบครัวหรือกลุ่มเพื่อนได้อย่างสมบูรณ์แบบ</p>
-                    <p style="margin-top:1rem;">เรามุ่งมั่นที่จะมอบช่วงเวลาแห่งความสุขและการเติมพลังให้กับแขกทุกท่าน เพราะเราเชื่อว่าการพักผ่อนที่ดีที่สุดคือการได้ใช้เวลาร่วมกันในพื้นที่ส่วนตัว</p>
+            <div class="container">
+                <div class="section-title reveal">
+                    <h2>เกี่ยวกับเรา</h2>
+                    <p>นิยามใหม่ของคำว่าบ้านพักตากอากาศ</p>
                 </div>
-                <div class="about-image reveal delay2">
-                    <img src="https://images.unsplash.com/photo-1615874959474-d609969a20ed?q=80&w=1920&auto=format&fit=crop" alt="Pool Villa Interior" />
+                <div class="about-content">
+                    <div class="about-text reveal delay1">
+                        <h3>วิลล่าในฝันของคุณ</h3>
+                        <p>วิลล่า พาราไดซ์ ตั้งอยู่ในทำเลที่เงียบสงบ มอบประสบการณ์การพักผ่อนที่เป็นส่วนตัวอย่างแท้จริง วิลล่าทุกหลังมาพร้อมสระว่ายน้ำส่วนตัวและสิ่งอำนวยความสะดวกครบครัน ตอบโจทย์การพักผ่อนกับครอบครัวหรือกลุ่มเพื่อนได้อย่างสมบูรณ์แบบ</p>
+                        <p style="margin-top:1rem;">เรามุ่งมั่นที่จะมอบช่วงเวลาแห่งความสุขและการเติมพลังให้กับแขกทุกท่าน เพราะเราเชื่อว่าการพักผ่อนที่ดีที่สุดคือการได้ใช้เวลาร่วมกันในพื้นที่ส่วนตัว</p>
+                    </div>
+                    <div class="about-image reveal delay2">
+                        <img src="https://images.unsplash.com/photo-1615874959474-d609969a20ed?q=80&w=1920&auto=format&fit=crop" alt="Pool Villa Interior" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item reveal">
+                        <h3 class="counter" data-target="50">0</h3>
+                        <p>วิลล่าในเครือข่าย</p>
+                    </div>
+                    <div class="stat-item reveal delay1">
+                        <h3 class="counter" data-target="1200">0</h3>
+                        <p>แขกผู้พักอาศัย</p>
+                    </div>
+                    <div class="stat-item reveal delay2">
+                        <h3 class="counter" data-target="98">0</h3>
+                        <p>ความพึงพอใจ (%)</p>
+                    </div>
+                    <div class="stat-item reveal delay3">
+                        <h3 class="counter" data-target="5">0</h3>
+                        <p>ปีแห่งความไว้วางใจ</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section class="amenities" id="amenities">
-             <div class="section-title reveal">
-                <h2>สิ่งอำนวยความสะดวกครบครัน</h2>
-                 <p>ทุกสิ่งที่ท่านต้องการสำหรับการพักผ่อนที่สมบูรณ์แบบ</p>
-            </div>
-            <div class="amenity-cards">
-                <div class="amenity-card reveal delay1">
-                    <div class="icon-wrapper"><i class="fa-solid fa-person-swimming"></i></div>
-                    <h3>สระว่ายน้ำส่วนตัว</h3>
-                    <p>สระว่ายน้ำระบบเกลือในวิลล่าทุกหลัง</p>
+            <div class="container">
+                <div class="section-title reveal">
+                    <h2>สิ่งอำนวยความสะดวกครบครัน</h2>
+                    <p>ทุกสิ่งที่ท่านต้องการสำหรับการพักผ่อนที่สมบูรณ์แบบ</p>
                 </div>
-                <div class="amenity-card reveal delay2">
-                    <div class="icon-wrapper"><i class="fa-solid fa-utensils"></i></div>
-                    <h3>ครัวยุโรป</h3>
-                    <p>บริการเชฟส่วนตัว และอุปกรณ์ครัวครบชุด</p>
-                </div>
-                <div class="amenity-card reveal delay3">
-                    <div class="icon-wrapper"><i class="fa-solid fa-film"></i></div>
-                    <h3>ความบันเทิง</h3>
-                    <p>ชุดเครื่องเสียงและ Home Theater</p>
+                <div class="amenity-cards">
+                    <div class="amenity-card reveal delay1">
+                        <div class="icon-wrapper"><i class="fa-solid fa-person-swimming"></i></div>
+                        <h3>สระว่ายน้ำส่วนตัว</h3>
+                        <p>สระว่ายน้ำระบบเกลือในวิลล่าทุกหลัง</p>
+                    </div>
+                    <div class="amenity-card reveal delay2">
+                        <div class="icon-wrapper"><i class="fa-solid fa-utensils"></i></div>
+                        <h3>ครัวยุโรป</h3>
+                        <p>บริการเชฟส่วนตัว และอุปกรณ์ครัวครบชุด</p>
+                    </div>
+                    <div class="amenity-card reveal delay3">
+                        <div class="icon-wrapper"><i class="fa-solid fa-film"></i></div>
+                        <h3>ความบันเทิง</h3>
+                        <p>ชุดเครื่องเสียงและ Home Theater</p>
+                    </div>
+                    <div class="amenity-card reveal delay1">
+                        <div class="icon-wrapper"><i class="fa-solid fa-spa"></i></div>
+                        <h3>สปาและสุขภาพ</h3>
+                        <p>บริการนวดและสปาในวิลล่า</p>
+                    </div>
+                    <div class="amenity-card reveal delay2">
+                        <div class="icon-wrapper"><i class="fa-solid fa-car"></i></div>
+                        <h3>ที่จอดรถส่วนตัว</h3>
+                        <p>ที่จอดรถกว้างขวางในพื้นที่ส่วนตัว</p>
+                    </div>
+                    <div class="amenity-card reveal delay3">
+                        <div class="icon-wrapper"><i class="fa-solid fa-wifi"></i></div>
+                        <h3>อินเทอร์เน็ตความเร็วสูง</h3>
+                        <p>Wi-Fi ครอบคลุมทั่วทั้งวิลล่า</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section class="gallery" id="gallery">
-            <div class="section-title reveal">
-                <h2>วิลล่าของเรา</h2>
-                <p>เลือกวิลล่าที่ใช่สำหรับวันหยุดของคุณ</p>
-            </div>
-            <div class="gallery-grid">
-                <div class="room-card reveal delay1" data-room="Villa 2 Bedrooms">
-                    <div class="badge">Luxury</div>
-                    <div class="card-image-wrapper">
-                         <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1920&auto=format&fit=crop" alt="2 Bedroom Villa" />
-                         <div class="card-overlay">
-                              <i class="fa-solid fa-eye"></i>
-                              <span>ดูรายละเอียด</span>
-                         </div>
-                    </div>
-                    <div class="room-info"><h3>วิลล่า 2 ห้องนอน</h3><p>รองรับ 4-8 คน</p><div class="price">฿7,500 / คืน</div></div>
+            <div class="container">
+                <div class="section-title reveal">
+                    <h2>วิลล่าของเรา</h2>
+                    <p>เลือกวิลล่าที่ใช่สำหรับวันหยุดของคุณ</p>
                 </div>
-
-                <div class="room-card reveal delay2" data-room="Villa 3 Bedrooms">
-                    <div class="badge">Family</div>
-                    <div class="card-image-wrapper">
-                         <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1920&auto=format&fit=crop" alt="3 Bedroom Villa" />
-                         <div class="card-overlay">
-                              <i class="fa-solid fa-eye"></i>
-                              <span>ดูรายละเอียด</span>
-                         </div>
-                    </div>
-                    <div class="room-info"><h3>วิลล่า 3 ห้องนอน</h3><p>รองรับ 6-12 คน</p><div class="price">฿9,800 / คืน</div></div>
-                </div>
-
-                <div class="room-card reveal delay3" data-room="Villa 4 Bedrooms">
-                    <div class="badge">Popular</div>
-                    <div class="card-image-wrapper">
-                        <img src="https://images.unsplash.com/photo-1558036117-15d82a90b9b1?q=80&w=1920&auto=format&fit=crop" alt="4 Bedroom Villa" />
-                        <div class="card-overlay">
-                            <i class="fa-solid fa-eye"></i>
-                            <span>ดูรายละเอียด</span>
+                <div class="gallery-grid">
+                    <div class="room-card reveal delay1" data-room="Villa 2 Bedrooms">
+                        <div class="badge">Luxury</div>
+                        <div class="card-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1920&auto=format&fit=crop" alt="2 Bedroom Villa" />
+                            <div class="card-overlay">
+                                <i class="fa-solid fa-eye"></i>
+                                <span>ดูรายละเอียด</span>
+                            </div>
                         </div>
+                        <div class="room-info"><h3>วิลล่า 2 ห้องนอน</h3><p>รองรับ 4-8 คน</p><div class="price">฿7,500 / คืน</div></div>
                     </div>
-                    <div class="room-info"><h3>วิลล่า 4 ห้องนอน</h3><p>รองรับ 8-16 คน</p><div class="price">฿12,000 / คืน</div></div>
-                </div>
 
-                <div class="room-card reveal delay1" data-room="Villa 6 Bedrooms">
-                    <div class="badge">New</div>
-                     <div class="card-image-wrapper">
-                        <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1920&auto=format&fit=crop" alt="6 Bedroom Villa" />
-                        <div class="card-overlay">
-                            <i class="fa-solid fa-eye"></i>
-                            <span>ดูรายละเอียด</span>
+                    <div class="room-card reveal delay2" data-room="Villa 3 Bedrooms">
+                        <div class="badge">Family</div>
+                        <div class="card-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1920&auto=format&fit=crop" alt="3 Bedroom Villa" />
+                            <div class="card-overlay">
+                                <i class="fa-solid fa-eye"></i>
+                                <span>ดูรายละเอียด</span>
+                            </div>
                         </div>
+                        <div class="room-info"><h3>วิลล่า 3 ห้องนอน</h3><p>รองรับ 6-12 คน</p><div class="price">฿9,800 / คืน</div></div>
                     </div>
-                    <div class="room-info"><h3>วิลล่า 6 ห้องนอน</h3><p>รองรับ 12-20 คน</p><div class="price">฿18,000 / คืน</div></div>
+
+                    <div class="room-card reveal delay3" data-room="Villa 4 Bedrooms">
+                        <div class="badge">Popular</div>
+                        <div class="card-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1558036117-15d82a90b9b1?q=80&w=1920&auto=format&fit=crop" alt="4 Bedroom Villa" />
+                            <div class="card-overlay">
+                                <i class="fa-solid fa-eye"></i>
+                                <span>ดูรายละเอียด</span>
+                            </div>
+                        </div>
+                        <div class="room-info"><h3>วิลล่า 4 ห้องนอน</h3><p>รองรับ 8-16 คน</p><div class="price">฿12,000 / คืน</div></div>
+                    </div>
+
+                    <div class="room-card reveal delay1" data-room="Villa 6 Bedrooms">
+                        <div class="badge">New</div>
+                        <div class="card-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1920&auto=format&fit=crop" alt="6 Bedroom Villa" />
+                            <div class="card-overlay">
+                                <i class="fa-solid fa-eye"></i>
+                                <span>ดูรายละเอียด</span>
+                            </div>
+                        </div>
+                        <div class="room-info"><h3>วิลล่า 6 ห้องนอน</h3><p>รองรับ 12-20 คน</p><div class="price">฿18,000 / คืน</div></div>
+                    </div>
                 </div>
             </div>
         </section>
         
         <section class="reviews" id="reviews">
-            <div class="section-title reveal">
-                <h2>เสียงจากลูกค้า</h2>
-                <p>ความประทับใจที่เราภูมิใจ</p>
-            </div>
-            <div class="review-cards">
-                <div class="review-card reveal delay1">
-                    <p>"สระว่ายน้ำส่วนตัวใหญ่และสะอาดมาก! เหมาะกับการจัดปาร์ตี้กับเพื่อนๆ ที่สุดครับ"</p>
-                    <div class="author">— คุณสมชาย</div>
+            <div class="container">
+                <div class="section-title reveal">
+                    <h2>เสียงจากลูกค้า</h2>
+                    <p>ความประทับใจที่เราภูมิใจ</p>
                 </div>
-                <div class="review-card reveal delay2">
-                    <p>"วิลล่าสวยเหมือนในรูปเลยค่ะ สะอาด มีคาราโอเกะให้ร้องสนุกมาก ประทับใจมากค่ะ"</p>
-                    <div class="author">— คุณมาลี</div>
-                </div>
-                <div class="review-card reveal delay3">
-                    <p>"ประทับใจความเป็นส่วนตัวสุดๆ ไม่ผิดหวังเลยที่เลือกมาพักผ่อนที่นี่ จะกลับมาอีกแน่นอน"</p>
-                    <div class="author">— คุณธนพล</div>
+                <div class="review-cards">
+                    <div class="review-card reveal delay1">
+                        <p>"สระว่ายน้ำส่วนตัวใหญ่และสะอาดมาก! เหมาะกับการจัดปาร์ตี้กับเพื่อนๆ ที่สุดครับ"</p>
+                        <div class="author">— คุณสมชาย</div>
+                    </div>
+                    <div class="review-card reveal delay2">
+                        <p>"วิลล่าสวยเหมือนในรูปเลยค่ะ สะอาด มีคาราโอเกะให้ร้องสนุกมาก ประทับใจมากค่ะ"</p>
+                        <div class="author">— คุณมาลี</div>
+                    </div>
+                    <div class="review-card reveal delay3">
+                        <p>"ประทับใจความเป็นส่วนตัวสุดๆ ไม่ผิดหวังเลยที่เลือกมาพักผ่อนที่นี่ จะกลับมาอีกแน่นอน"</p>
+                        <div class="author">— คุณธนพล</div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section class="contact-section" id="contact">
-            <div class="section-title reveal">
-                <h2>ติดต่อเรา</h2>
-                <p>พร้อมให้บริการคุณตลอด 24 ชั่วโมง</p>
-            </div>
-            <div class="contact-info reveal delay1">
-                <div class="contact-item">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>999 ซอยนาเกลือ 16, พัทยา, ชลบุรี 20150</span>
+            <div class="container">
+                <div class="section-title reveal">
+                    <h2>ติดต่อเรา</h2>
+                    <p>พร้อมให้บริการคุณตลอด 24 ชั่วโมง</p>
                 </div>
-                <div class="contact-item">
-                    <i class="fa-solid fa-phone"></i>
-                    <span>โทร: 038-123-456</span>
+                <div class="contact-info reveal delay1">
+                    <div class="contact-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>999 ซอยนาเกลือ 16, พัทยา, ชลบุรี 20150</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>โทร: 038-123-456</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>info@villaparadise.com</span>
+                    </div>
                 </div>
-                <div class="contact-item">
-                    <i class="fa-solid fa-envelope"></i>
-                    <span>info@villaparadise.com</span>
+                <div class="social-links reveal delay2">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" aria-label="LINE"><i class="fa-brands fa-line"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                 </div>
-            </div>
-            <div class="social-links reveal delay2">
-                <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
-                <a href="#" aria-label="LINE"><i class="fa-brands fa-line"></i></a>
-                <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            </div>
-            <div class="google-map reveal delay3">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.27599424729!2d100.9023386758418!3d12.95433181463124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3102966a0250f567%3A0xeda660f757e5b229!2z4Lit4Li44LiX4Lii4Liy4LiB4Liy4LiiIDE2IOC4muC4suC4peC4seC4ouC4oeC4quC4suC4meC4seC4ouC4o-C4suC4iOC4m-C4o-C4sOC4iuC4nuC4o-C4sOC4gOC4seC4hyAxOCwg4LiB4Lij4Li44LiB4Lij4Li04LiB4Liy4LijLCDguKHguKvguLLguKfguLTguJfguKLguLIg4LiB4Lij4Li44LiB4Lij4Li04LiB4Liy4LijIDIwMTUw!5e0!3m2!1sth!2sth!4v1695791654321!5m2!1sth!2sth" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div class="google-map reveal delay3">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.27599424729!2d100.9023386758418!3d12.95433181463124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3102966a0250f567%3A0xeda660f757e5b229!2z4Lit4Li44LiX4Lii4Liy4LiB4Liy4LiiIDE2IOC4muC4suC4peC4seC4ouC4oeC4quC4suC4meC4seC4ouC4o-C4suC4iOC4m-C4o-C4sOC4iuC4nuC4o-C4sOC4gOC4seC4hyAxOCwg4LiB4Lij4Li44LiB4Lij4Li04LiB4Liy4LijLCDguKHguKvguLLguKfguLTguJfguKLguLIg4LiB4Lij4Li44LiB4Lij4Li04LiB4Liy4LijIDIwMTUw!5e0!3m2!1sth!2sth!4v1695791654321!5m2!1sth!2sth" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
             </div>
         </section>
     </main>
     
     <footer>
-        <p>© 2025 พูลวิลล่า พาราไดซ์ | สงวนลิขสิทธิ์</p>
+        <div class="container">
+            <p>© 2025 พูลวิลล่า พาราไดซ์ | สงวนลิขสิทธิ์</p>
+        </div>
     </footer>
 
     <button id="scrollToTopBtn" aria-label="กลับสู่ด้านบน"><i class="fa-solid fa-arrow-up"></i></button>
+
+    <div class="weather-widget">
+        <div class="weather-header">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>พัทยา</span>
+        </div>
+        <div class="weather-temp">32°C</div>
+        <div class="weather-desc">ท้องฟ้าแจ่มใส</div>
+    </div>
 
     <div id="details-popup" class="popup-overlay">
         <div class="popup-box">
@@ -234,6 +1225,8 @@
             <p id="bookingRoomName"></p>
             <form class="booking-form" id="bookingForm">
                 <input type="text" name="name" placeholder="ชื่อ-นามสกุล" required />
+                <input type="email" name="email" placeholder="อีเมล" required />
+                <input type="tel" name="phone" placeholder="เบอร์โทรศัพท์" required />
                 <input type="date" name="checkin" required />
                 <input type="date" name="checkout" required />
                 <select name="guests" required>
@@ -244,6 +1237,7 @@
                     <option value="13-16">13-16 คน</option>
                     <option value="17-20">17-20 คน</option>
                 </select>
+                <textarea name="message" placeholder="ข้อความเพิ่มเติม (ถ้ามี)" rows="3"></textarea>
                 <button type="submit" class="cta-button">ส่งคำขอจอง</button>
                 <div class="booking-result" id="bookingResult"></div>
             </form>
@@ -251,8 +1245,290 @@
         </div>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // Preloader
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+            }, 1000);
+        });
+
+        // Mobile Navigation
+        const hamburger = document.querySelector('.hamburger');
+        const mobileNav = document.querySelector('.mobile-nav');
+        const mobileNavClose = document.querySelector('.mobile-nav-close');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        hamburger.addEventListener('click', () => {
+            mobileNav.classList.add('active');
+        });
+
+        mobileNavClose.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('active');
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll to top button
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.add('active');
+            } else {
+                scrollToTopBtn.classList.remove('active');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Hero slideshow
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[n].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Start slideshow
+        setInterval(nextSlide, 5000);
+
+        // Scroll reveal animation
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(reveal => {
+                const windowHeight = window.innerHeight;
+                const elementTop = reveal.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', revealOnScroll);
+        // Initial check
+        revealOnScroll();
+
+        // Counter animation
+        function animateCounter() {
+            const counters = document.querySelectorAll('.counter');
+            const speed = 200;
+            
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const increment = target / speed;
+                
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(() => animateCounter(), 1);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        }
+
+        // Start counter animation when stats section is in view
+        const statsSection = document.querySelector('.stats');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(statsSection);
+
+        // Room details popup
+        const roomCards = document.querySelectorAll('.room-card');
+        const detailsPopup = document.getElementById('details-popup');
+        const roomTitle = document.getElementById('roomTitle');
+        const roomDesc = document.getElementById('roomDesc');
+        const roomFeatures = document.getElementById('roomFeatures');
+        const openBookingBtn = document.getElementById('open-booking-btn');
+        const popupCloseBtns = document.querySelectorAll('.popup-close-btn');
+
+        const roomData = {
+            "Villa 2 Bedrooms": {
+                title: "วิลล่า 2 ห้องนอน",
+                description: "วิลล่าสุดหรูพร้อมสระว่ายน้ำส่วนตัว ภายในตกแต่งอย่างมีระดับ เหมาะสำหรับครอบครัวหรือกลุ่มเพื่อนขนาดเล็ก",
+                features: [
+                    "2 ห้องนอนพร้อมเตียงคิงไซส์",
+                    "2 ห้องน้ำพร้อมอ่างอาบน้ำ",
+                    "สระว่ายน้ำส่วนตัวขนาด 4x8 เมตร",
+                    "ห้องนั่งเล่นพร้อมโฮมเธียเตอร์",
+                    "ครัวยุโรปพร้อมอุปกรณ์ครบครัน",
+                    "ที่จอดรถส่วนตัว 2 คัน"
+                ]
+            },
+            "Villa 3 Bedrooms": {
+                title: "วิลล่า 3 ห้องนอน",
+                description: "วิลล่าสำหรับครอบครัวใหญ่ พร้อมพื้นที่กว้างขวางและสิ่งอำนวยความสะดวกครบครัน",
+                features: [
+                    "3 ห้องนอน (2 เตียงคิงไซส์, 1 เตียงควีนไซส์)",
+                    "3 ห้องน้ำพร้อมอ่างอาบน้ำ",
+                    "สระว่ายน้ำส่วนตัวขนาด 5x10 เมตร",
+                    "ห้องนั่งเล่นและห้องอาหารแยก",
+                    "ครัวพร้อมอุปกรณ์ครบครัน",
+                    "สวนส่วนตัวพร้อมพื้นที่บาร์บีคิว"
+                ]
+            },
+            "Villa 4 Bedrooms": {
+                title: "วิลล่า 4 ห้องนอน",
+                description: "วิลล่าริมทะเลสุดเอกลักษณ์ พร้อมวิวทะเลสวยงามและพื้นที่ส่วนตัวที่สมบูรณ์แบบ",
+                features: [
+                    "4 ห้องนอนพร้อมวิวทะเล",
+                    "4 ห้องน้ำพร้อมอ่างจากุซซี่",
+                    "สระว่ายน้ำอินฟินิตี้ริมทะเล",
+                    "ห้องนั่งเล่น 2 โซน",
+                    "ครัวและบาร์ส่วนตัว",
+                    "พื้นที่สวนและลานอาบแดด"
+                ]
+            },
+            "Villa 6 Bedrooms": {
+                title: "วิลล่า 6 ห้องนอน",
+                description: "วิลล่าราชวงศ์สุดหรู พร้อมพื้นที่กว้างขวางและสิ่งอำนวยความสะดวกระดับพรีเมียม",
+                features: [
+                    "6 ห้องนอนสวีทพร้อมห้องน้ำในตัว",
+                    "สระว่ายน้ำขนาดใหญ่พร้อมสไลเดอร์",
+                    "ห้องซาวน่าและสปา",
+                    "โรงภาพยนตร์ส่วนตัว",
+                    "ห้องออกกำลังกาย",
+                    "พื้นที่จัดปาร์ตี้และบาร์บีคิว"
+                ]
+            }
+        };
+
+        roomCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const roomType = this.getAttribute('data-room');
+                const data = roomData[roomType];
+                
+                roomTitle.textContent = data.title;
+                roomDesc.textContent = data.description;
+                
+                // Clear previous features
+                roomFeatures.innerHTML = '';
+                
+                // Add new features
+                data.features.forEach(feature => {
+                    const li = document.createElement('li');
+                    li.textContent = feature;
+                    roomFeatures.appendChild(li);
+                });
+                
+                // Store current room type for booking
+                openBookingBtn.setAttribute('data-room', roomType);
+                
+                // Show popup
+                detailsPopup.classList.add('active');
+                
+                // Initialize panorama viewer (placeholder)
+                // In a real implementation, you would use Pannellum here
+                const panoramaViewer = document.getElementById('panorama-viewer');
+                panoramaViewer.innerHTML = `<img src="${this.querySelector('img').src}" alt="${data.title}" style="width:100%;height:100%;object-fit:cover;">`;
+            });
+        });
+
+        // Booking popup
+        const bookingPopup = document.getElementById('booking-popup');
+        const bookingRoomName = document.getElementById('bookingRoomName');
+        const bookingForm = document.getElementById('bookingForm');
+        const bookingResult = document.getElementById('bookingResult');
+
+        openBookingBtn.addEventListener('click', function() {
+            const roomType = this.getAttribute('data-room');
+            bookingRoomName.textContent = roomData[roomType].title;
+            detailsPopup.classList.remove('active');
+            bookingPopup.classList.add('active');
+        });
+
+        // Close popups
+        popupCloseBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                detailsPopup.classList.remove('active');
+                bookingPopup.classList.remove('active');
+            });
+        });
+
+        // Booking form submission
+        bookingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulate form submission
+            bookingResult.textContent = "กำลังส่งข้อมูลการจอง...";
+            bookingResult.className = "booking-result";
+            bookingResult.style.display = "block";
+            
+            setTimeout(() => {
+                bookingResult.textContent = "ขอบคุณสำหรับการจอง! เราจะติดต่อกลับภายใน 24 ชั่วโมง";
+                bookingResult.className = "booking-result success";
+                
+                // Reset form
+                bookingForm.reset();
+                
+                // Close popup after 3 seconds
+                setTimeout(() => {
+                    bookingPopup.classList.remove('active');
+                }, 3000);
+            }, 2000);
+        });
+
+        // Weather widget
+        window.addEventListener('scroll', function() {
+            const weatherWidget = document.querySelector('.weather-widget');
+            if (window.scrollY > 500) {
+                weatherWidget.classList.add('active');
+            } else {
+                weatherWidget.classList.remove('active');
+            }
+        });
+
+        // Simple weather data (in a real app, you would fetch from an API)
+        function updateWeather() {
+            // This is just a placeholder - in a real app you would use a weather API
+            const temp = Math.floor(Math.random() * 10) + 28; // Random temp between 28-37
+            const weatherDesc = ["ท้องฟ้าแจ่มใส", "มีเมฆบางส่วน", "มีแดด", "ร้อน"][Math.floor(Math.random() * 4)];
+            
+            document.querySelector('.weather-temp').textContent = `${temp}°C`;
+            document.querySelector('.weather-desc').textContent = weatherDesc;
+        }
+
+        // Update weather every 30 minutes
+        updateWeather();
+        setInterval(updateWeather, 1800000); // 30 minutes
+    </script>
 </body>
 </html>
