@@ -572,6 +572,32 @@
             margin-top: 0.5rem;
         }
 
+        /* Villa Buttons */
+        .villa-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .villa-btn {
+            background-color: var(--white);
+            color: var(--text);
+            border: 2px solid var(--primary);
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .villa-btn.active,
+        .villa-btn:hover {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
         /* Reviews Section */
         .reviews {
             background-color: #f8f9fa;
@@ -736,7 +762,7 @@
             position: relative;
             background-color: var(--white);
             width: 90%;
-            max-width: 800px;
+            max-width: 1000px;
             max-height: 90vh;
             border-radius: 10px;
             padding: 2rem;
@@ -766,7 +792,7 @@
 
         #panorama-viewer {
             width: 100%;
-            height: 300px;
+            height: 400px;
             margin-bottom: 1.5rem;
             border-radius: 8px;
             overflow: hidden;
@@ -794,7 +820,8 @@
         }
 
         .booking-form input,
-        .booking-form select {
+        .booking-form select,
+        .booking-form textarea {
             padding: 0.8rem 1rem;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -880,6 +907,28 @@
             font-size: 0.9rem;
         }
 
+        /* 360 Viewer Controls */
+        .viewer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .viewer-btn {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .viewer-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
         /* Responsive Styles */
         @media (max-width: 992px) {
             h1 {
@@ -923,6 +972,11 @@
 
             .gallery-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .villa-buttons {
+                flex-direction: column;
+                align-items: center;
             }
         }
 
@@ -1082,8 +1136,18 @@
                     <h2>วิลล่าของเรา</h2>
                     <p>เลือกวิลล่าที่ใช่สำหรับวันหยุดของคุณ</p>
                 </div>
+                
+                <!-- Villa Filter Buttons -->
+                <div class="villa-buttons reveal">
+                    <button class="villa-btn active" data-filter="all">ทั้งหมด</button>
+                    <button class="villa-btn" data-filter="2-bedroom">2 ห้องนอน</button>
+                    <button class="villa-btn" data-filter="3-bedroom">3 ห้องนอน</button>
+                    <button class="villa-btn" data-filter="4-bedroom">4 ห้องนอน</button>
+                    <button class="villa-btn" data-filter="6-bedroom">6 ห้องนอน</button>
+                </div>
+                
                 <div class="gallery-grid">
-                    <div class="room-card reveal delay1" data-room="Villa 2 Bedrooms">
+                    <div class="room-card reveal delay1" data-room="Villa 2 Bedrooms" data-category="2-bedroom">
                         <div class="badge">Luxury</div>
                         <div class="card-image-wrapper">
                             <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1920&auto=format&fit=crop" alt="2 Bedroom Villa" />
@@ -1092,10 +1156,19 @@
                                 <span>ดูรายละเอียด</span>
                             </div>
                         </div>
-                        <div class="room-info"><h3>วิลล่า 2 ห้องนอน</h3><p>รองรับ 4-8 คน</p><div class="price">฿7,500 / คืน</div></div>
+                        <div class="room-info">
+                            <h3>วิลล่า 2 ห้องนอน</h3>
+                            <p>รองรับ 4-8 คน</p>
+                            <div class="price">฿7,500 / คืน</div>
+                            <div class="viewer-controls">
+                                <button class="viewer-btn" data-room="2-bedroom" data-type="living-room">ห้องนั่งเล่น</button>
+                                <button class="viewer-btn" data-room="2-bedroom" data-type="bedroom">ห้องนอน</button>
+                                <button class="viewer-btn" data-room="2-bedroom" data-type="pool">สระว่ายน้ำ</button>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="room-card reveal delay2" data-room="Villa 3 Bedrooms">
+                    <div class="room-card reveal delay2" data-room="Villa 3 Bedrooms" data-category="3-bedroom">
                         <div class="badge">Family</div>
                         <div class="card-image-wrapper">
                             <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1920&auto=format&fit=crop" alt="3 Bedroom Villa" />
@@ -1104,10 +1177,19 @@
                                 <span>ดูรายละเอียด</span>
                             </div>
                         </div>
-                        <div class="room-info"><h3>วิลล่า 3 ห้องนอน</h3><p>รองรับ 6-12 คน</p><div class="price">฿9,800 / คืน</div></div>
+                        <div class="room-info">
+                            <h3>วิลล่า 3 ห้องนอน</h3>
+                            <p>รองรับ 6-12 คน</p>
+                            <div class="price">฿9,800 / คืน</div>
+                            <div class="viewer-controls">
+                                <button class="viewer-btn" data-room="3-bedroom" data-type="living-room">ห้องนั่งเล่น</button>
+                                <button class="viewer-btn" data-room="3-bedroom" data-type="bedroom">ห้องนอน</button>
+                                <button class="viewer-btn" data-room="3-bedroom" data-type="pool">สระว่ายน้ำ</button>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="room-card reveal delay3" data-room="Villa 4 Bedrooms">
+                    <div class="room-card reveal delay3" data-room="Villa 4 Bedrooms" data-category="4-bedroom">
                         <div class="badge">Popular</div>
                         <div class="card-image-wrapper">
                             <img src="https://images.unsplash.com/photo-1558036117-15d82a90b9b1?q=80&w=1920&auto=format&fit=crop" alt="4 Bedroom Villa" />
@@ -1116,10 +1198,19 @@
                                 <span>ดูรายละเอียด</span>
                             </div>
                         </div>
-                        <div class="room-info"><h3>วิลล่า 4 ห้องนอน</h3><p>รองรับ 8-16 คน</p><div class="price">฿12,000 / คืน</div></div>
+                        <div class="room-info">
+                            <h3>วิลล่า 4 ห้องนอน</h3>
+                            <p>รองรับ 8-16 คน</p>
+                            <div class="price">฿12,000 / คืน</div>
+                            <div class="viewer-controls">
+                                <button class="viewer-btn" data-room="4-bedroom" data-type="living-room">ห้องนั่งเล่น</button>
+                                <button class="viewer-btn" data-room="4-bedroom" data-type="bedroom">ห้องนอน</button>
+                                <button class="viewer-btn" data-room="4-bedroom" data-type="pool">สระว่ายน้ำ</button>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="room-card reveal delay1" data-room="Villa 6 Bedrooms">
+                    <div class="room-card reveal delay1" data-room="Villa 6 Bedrooms" data-category="6-bedroom">
                         <div class="badge">New</div>
                         <div class="card-image-wrapper">
                             <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1920&auto=format&fit=crop" alt="6 Bedroom Villa" />
@@ -1128,7 +1219,16 @@
                                 <span>ดูรายละเอียด</span>
                             </div>
                         </div>
-                        <div class="room-info"><h3>วิลล่า 6 ห้องนอน</h3><p>รองรับ 12-20 คน</p><div class="price">฿18,000 / คืน</div></div>
+                        <div class="room-info">
+                            <h3>วิลล่า 6 ห้องนอน</h3>
+                            <p>รองรับ 12-20 คน</p>
+                            <div class="price">฿18,000 / คืน</div>
+                            <div class="viewer-controls">
+                                <button class="viewer-btn" data-room="6-bedroom" data-type="living-room">ห้องนั่งเล่น</button>
+                                <button class="viewer-btn" data-room="6-bedroom" data-type="bedroom">ห้องนอน</button>
+                                <button class="viewer-btn" data-room="6-bedroom" data-type="pool">สระว่ายน้ำ</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1206,9 +1306,23 @@
         <div class="weather-desc">ท้องฟ้าแจ่มใส</div>
     </div>
 
+    <!-- 360 Viewer Popup -->
+    <div id="viewer-popup" class="popup-overlay">
+        <div class="popup-box">
+            <h3 id="viewer-title">มุมมอง 360 องศา</h3>
+            <div id="panorama-viewer"></div>
+            <div class="viewer-controls">
+                <button class="viewer-btn" id="prev-view">ก่อนหน้า</button>
+                <button class="viewer-btn" id="next-view">ถัดไป</button>
+                <button class="viewer-btn" id="fullscreen-btn">เต็มหน้าจอ</button>
+            </div>
+            <div class="popup-close-btn"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+    </div>
+
     <div id="details-popup" class="popup-overlay">
         <div class="popup-box">
-            <div id="panorama-viewer"></div>
+            <div id="details-panorama"></div>
             <div class="popup-details">
                 <h3 id="roomTitle"></h3>
                 <p id="roomDesc"></p>
@@ -1371,8 +1485,30 @@
 
         observer.observe(statsSection);
 
-        // Room details popup
+        // Villa Filtering
+        const villaButtons = document.querySelectorAll('.villa-btn');
         const roomCards = document.querySelectorAll('.room-card');
+
+        villaButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                villaButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                
+                roomCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Room details popup
         const detailsPopup = document.getElementById('details-popup');
         const roomTitle = document.getElementById('roomTitle');
         const roomDesc = document.getElementById('roomDesc');
@@ -1456,10 +1592,101 @@
                 detailsPopup.classList.add('active');
                 
                 // Initialize panorama viewer (placeholder)
-                // In a real implementation, you would use Pannellum here
-                const panoramaViewer = document.getElementById('panorama-viewer');
+                const panoramaViewer = document.getElementById('details-panorama');
                 panoramaViewer.innerHTML = `<img src="${this.querySelector('img').src}" alt="${data.title}" style="width:100%;height:100%;object-fit:cover;">`;
             });
+        });
+
+        // 360 Viewer Functionality
+        const viewerPopup = document.getElementById('viewer-popup');
+        const viewerTitle = document.getElementById('viewer-title');
+        const panoramaViewer = document.getElementById('panorama-viewer');
+        const viewerButtons = document.querySelectorAll('.viewer-btn[data-room]');
+        const prevViewBtn = document.getElementById('prev-view');
+        const nextViewBtn = document.getElementById('next-view');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+        // Sample 360 images data (in a real app, these would be actual 360 images)
+        const villa360Data = {
+            '2-bedroom': {
+                'living-room': 'https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://i.imgur.com/6eZKlhU.jpg',
+                'bedroom': 'https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://i.imgur.com/6eZKlhU.jpg',
+                'pool': 'https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://i.imgur.com/6eZKlhU.jpg'
+            },
+            '3-bedroom': {
+                'living-room': 'https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://i.imgur.com/6eZKlhU.jpg',
+                'bedroom': 'https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://i.imgur.com/6eZKlhU.jpg',
+                'pool': 'https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://i.imgur.com/6eZKlhU.jpg'
+            },
+            '4-bedroom': {
+                'living-room': 'https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://i.imgur.com/6eZKlhU.jpg',
+                'bedroom': 'https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://i.imgur.com/6eZKlhU.jpg',
+                'pool': 'https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://i.imgur.com/6eZKlhU.jpg'
+            },
+            '6-bedroom': {
+                'living-room': 'https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://i.imgur.com/6eZKlhU.jpg',
+                'bedroom': 'https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://i.imgur.com/6eZKlhU.jpg',
+                'pool': 'https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://i.imgur.com/6eZKlhU.jpg'
+            }
+        };
+
+        const viewTypes = ['living-room', 'bedroom', 'pool'];
+        const viewLabels = {
+            'living-room': 'ห้องนั่งเล่น',
+            'bedroom': 'ห้องนอน',
+            'pool': 'สระว่ายน้ำ'
+        };
+
+        let currentRoom = '';
+        let currentViewIndex = 0;
+
+        viewerButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent triggering the room card click
+                
+                currentRoom = this.getAttribute('data-room');
+                const viewType = this.getAttribute('data-type');
+                currentViewIndex = viewTypes.indexOf(viewType);
+                
+                open360Viewer(currentRoom, viewType);
+            });
+        });
+
+        function open360Viewer(room, viewType) {
+            viewerTitle.textContent = `วิลล่า ${room.split('-')[0]} ห้องนอน - ${viewLabels[viewType]}`;
+            
+            // In a real implementation, you would initialize Pannellum here
+            // For this example, we'll use a placeholder
+            panoramaViewer.innerHTML = `
+                <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f0f0f0;border-radius:8px;">
+                    <i class="fa-solid fa-360-degrees" style="font-size:3rem;color:#c19a6b;margin-bottom:1rem;"></i>
+                    <h3>มุมมอง 360 องศา</h3>
+                    <p>${viewLabels[viewType]} - วิลล่า ${room.split('-')[0]} ห้องนอน</p>
+                    <p style="color:#666;margin-top:1rem;">(ในเวอร์ชันจริงจะแสดงภาพ 360 องศาจริง)</p>
+                </div>
+            `;
+            
+            viewerPopup.classList.add('active');
+        }
+
+        prevViewBtn.addEventListener('click', function() {
+            currentViewIndex = (currentViewIndex - 1 + viewTypes.length) % viewTypes.length;
+            open360Viewer(currentRoom, viewTypes[currentViewIndex]);
+        });
+
+        nextViewBtn.addEventListener('click', function() {
+            currentViewIndex = (currentViewIndex + 1) % viewTypes.length;
+            open360Viewer(currentRoom, viewTypes[currentViewIndex]);
+        });
+
+        fullscreenBtn.addEventListener('click', function() {
+            if (panoramaViewer.requestFullscreen) {
+                panoramaViewer.requestFullscreen();
+            } else if (panoramaViewer.webkitRequestFullscreen) {
+                panoramaViewer.webkitRequestFullscreen();
+            } else if (panoramaViewer.msRequestFullscreen) {
+                panoramaViewer.msRequestFullscreen();
+            }
         });
 
         // Booking popup
@@ -1480,6 +1707,7 @@
             btn.addEventListener('click', function() {
                 detailsPopup.classList.remove('active');
                 bookingPopup.classList.remove('active');
+                viewerPopup.classList.remove('active');
             });
         });
 
